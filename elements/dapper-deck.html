@@ -1,0 +1,115 @@
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+    <dapper></dapper>
+
+@element dapper-deck
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://divshot.github.io/dapper
+-->
+<polymer-element name="dapper-deck" attributes="contentWidth contentHeight">
+  <template>
+    <link rel="stylesheet" href="dapper-deck.css" />
+    <div id="container" on-click="{{nextSlide}}">
+      <content></content>
+    </div>
+  </template>
+
+  <script>
+    (function() {
+      var _viewportWidth, _viewportHeight, _viewportAspect;
+      
+      var _instances = [];
+      
+      var _resize = function() {
+        _viewportWidth = window.innerWidth;
+        _viewportHeight = window.innerHeight;
+        _viewportAspect = _viewportWidth * 1.0 / _viewportHeight;
+        _instances.forEach(function(instance) {
+          instance.queueRelayout();
+        });
+      }
+      
+      window.addEventListener('resize', _resize);
+      _resize();
+      
+      var _frameLocks = {}
+      _frameLock = function(name, method) {
+        if (_frameLocks[name]) {
+          cancelAnimationFrame(_frameLocks[name]);
+          _frameLocks[name] = null;
+          _frameLock(name, method);
+        } else {
+          _frameLocks[name] = requestAnimationFrame(function() {
+            method();
+            _frameLocks[name] = null;
+          });
+        }
+      }
+      
+      Polymer('dapper-deck', {
+        /**
+         * The base width for the presentation's content. Defaults to 1280.
+         * 
+         * @attribute contentWidth
+         * @type integer
+         */
+        contentWidth: 1280,
+        /**
+         * The base height for the presentation's content. Defaults to 720.
+         * 
+         * @attribute contentHeight
+         * @type integer
+         */
+        contentHeight: 720,
+        
+        created: function() {
+          _instances.push(this);
+        },
+        ready: function() {
+          this.queueRelayout();
+        },
+        attached: function() {
+          if (!this.querySelector('dapper-slide[active]') && this.childNodes[0]) {
+            this.querySelector('dapper-slide').setAttribute('active', 'true');
+          }
+        },
+        observe: {
+          contentWidth: 'queueRelayout',
+          contentHeight: 'queueRelayout'
+        },
+        queueRelayout: function() {
+          _frameLock('relayout', this.relayout.bind(this));
+        },
+        relayout: function() {
+          this.$.container.style.width = this.contentWidth.toString() + "px";
+          this.$.container.style.height = this.contentHeight.toString() + "px";
+          
+          var contentAspect = this.contentWidth * 1.0 / this.contentHeight;
+          
+          
+          var scale = (_viewportAspect > contentAspect) ?
+            _viewportHeight * 1.0 / this.contentHeight :
+            _viewportWidth * 1.0 / this.contentWidth;
+          
+          this.$.container.style.webkitTransform = "translate(-50%, -50%) scale(" + scale + ") translate(50%, 50%)";
+        },
+        nextSlide: function() {
+          var nxt = this.querySelector('dapper-slide[active] + dapper-slide');
+          var cur = this.querySelector('dapper-slide[active]');
+          if (cur) { cur.removeAttribute('active'); }
+          
+          if (nxt) {
+            nxt.setAttribute('active', 'true');
+          } else {
+            this.querySelector('dapper-slide').setAttribute('active', 'true');
+          }
+        }
+      });  
+    })();
+  </script>
+
+</polymer-element>

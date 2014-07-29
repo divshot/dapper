@@ -1,0 +1,31 @@
+<!--
+Element providing solution to no problem in particular.
+
+##### Example
+
+    <dapper></dapper>
+
+@element dapper
+@blurb Element providing solution to no problem in particular.
+@status alpha
+@homepage http://divshot.github.io/dapper
+-->
+<polymer-element name="dapper-slide" attributes="active">
+
+  <template>
+    <link rel="stylesheet" href="dapper-slide.css" />
+    <content></content>
+  </template>
+
+  <script>
+
+    Polymer('dapper-slide', {
+      active: false,
+      attached: function() {
+        this.deck = this.parentNode;
+      }
+    });
+
+  </script>
+
+</polymer-element>

@@ -1,0 +1,10 @@
+{
+  "name": "dapper",
+  "version": "0.0.0",
+  "keywords": "seed, polymer, web-components",
+  "main": "dapper.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.3.1",
+    "core-style": "Polymer/core-style#~0.3.4"
+  }
+}
