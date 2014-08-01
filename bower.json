@@ -5,6 +5,7 @@
   "main": "dapper.html",
   "dependencies": {
     "polymer": "Polymer/polymer#~0.3.1",
-    "core-style": "Polymer/core-style#~0.3.4"
+    "core-style": "Polymer/core-style#~0.3.4",
+    "core-animated-pages": "Polymer/core-animated-pages#~0.3.4"
   }
 }

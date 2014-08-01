@@ -1,3 +1,5 @@
+<link rel="import" href="../../core-style/core-style.html">
+
 <!--
 Element providing solution to no problem in particular.
 
@@ -10,17 +12,20 @@ Element providing solution to no problem in particular.
 @status alpha
 @homepage http://divshot.github.io/dapper
 -->
-<polymer-element name="dapper-slide" attributes="active">
+<polymer-element name="dapper-slide" attributes="active themeFile">
 
   <template>
-    <link rel="stylesheet" href="dapper-slide.css" />
-    <content></content>
+    <link rel="stylesheet" href="dapper-slide.css">
+    <core-style ref="dapper-theme"></core-style>
+    
+    <div layout vertical center center-justified id="container" slide-from-right>
+      <content></content>
+    </div>
   </template>
 
   <script>
 
     Polymer('dapper-slide', {
-      active: false,
       attached: function() {
         this.deck = this.parentNode;
       }
